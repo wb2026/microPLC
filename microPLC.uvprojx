@@ -10,8 +10,8 @@
       <TargetName>N32G435CB</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
-      <uAC6>1</uAC6>
+      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
+      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>N32G435CB</Device>
@@ -172,8 +172,8 @@
             <AdsLsun>1</AdsLsun>
             <AdsLven>1</AdsLven>
             <AdsLsxf>1</AdsLsxf>
-            <RvctClst>0</RvctClst>
-            <GenPPlst>0</GenPPlst>
+            <RvctClst>1</RvctClst>
+            <GenPPlst>1</GenPPlst>
             <AdsCpuType>"Cortex-M4"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
             <mOS>0</mOS>
@@ -275,8 +275,8 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <StartAddress>0x8002800</StartAddress>
+                <Size>0x1c800</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\src\app;.\src\device\n32g43x;.\src\device\n32g43x\core;.\src\device\n32g43x\n32g43x_std_periph_driver\inc</IncludePath>
+              <IncludePath></IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -381,27 +381,17 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>app</GroupName>
+          <GroupName>src</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\app\main.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>device</GroupName>
-          <Files>
-            <File>
-              <FileName>startup_n32g43x.s</FileName>
+              <FileName>boot.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\src\device\n32g43x\startup_n32g43x.s</FilePath>
+              <FilePath>.\src\boot.s</FilePath>
             </File>
             <File>
-              <FileName>system_n32g43x.c</FileName>
+              <FileName>bsp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\device\n32g43x\system_n32g43x.c</FilePath>
+              <FilePath>.\src\bsp.c</FilePath>
             </File>
           </Files>
         </Group>
