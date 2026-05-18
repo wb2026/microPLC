@@ -268,13 +268,14 @@ uint32_t stackKey[taskStackSize_Key];
 TCB_t taskKey;
 int a=0;
 int b=0;
+int c=0;
 void task_key(void *p_arg)
 {
 	a=0;
 	while(1)
 	{
 		a++;
-//		portYIELD();
+		portYIELD();
 	}
 }
 
@@ -287,10 +288,21 @@ void task_led(void *p_arg)
 	while(1)
 	{
 		b++;
-//		portYIELD();
+		portYIELD();
 	}	
 }
 
+#define taskStackSize_Idle (8*50)
+uint32_t stackIdle[taskStackSize_Idle];
+TCB_t taskIdle;
+void task_Idle(void *p_arg)
+{
+	c=0;
+	while(1)
+	{
+		c++;
+	}	
+}
 
 
 uint32_t * initialiseStack( uint32_t * pxTopOfStack,TaskFunction_t pxCode )
@@ -435,14 +447,14 @@ void createTask(void)
 	taskKey.xEventListItem.xItemValue = 1;	
 	taskKey.xEventListItem.pvOwner = &taskKey;	
 	
-	
 	uxCurrentNumberOfTasks = ( unsigned long ) ( uxCurrentNumberOfTasks + 1U );
 	uxTaskNumber++;
 
-	
 	pxCurrentTCB = &taskKey;
 	
 	listINSERT_END(&( pxReadyTasksLists[ ( &taskKey )->uxPriority ] ), &( ( &taskKey )->xStateListItem ));
+	
+	
 	
 	( void ) memset( ( void * ) &taskLed, 0x00, sizeof( TCB_t ) );
 	( void ) memset( ( void * ) stackLed, 0x00, taskStackSize_Led );	
@@ -463,6 +475,28 @@ void createTask(void)
 	uxTaskNumber++;	
 	
 	listINSERT_END(&( pxReadyTasksLists[ ( &taskLed )->uxPriority ] ), &( ( &taskLed )->xStateListItem ));	
+	
+	
+	( void ) memset( ( void * ) &taskIdle, 0x00, sizeof( TCB_t ) );
+	( void ) memset( ( void * ) stackIdle, 0x00, taskStackSize_Idle );	
+	taskIdle.pxStack = stackIdle;
+	taskIdle.uxPriority = 4;
+
+	pxTopOfStack = &( taskIdle.pxStack[ taskStackSize_Idle - ( uint32_t ) 1 ] );
+	taskIdle.pxTopOfStack = initialiseStack(pxTopOfStack,(TaskFunction_t )task_Idle);
+	
+	taskIdle.xStateListItem.pxContainer = NULL;
+	taskIdle.xStateListItem.pvOwner = &taskIdle;
+	
+	taskIdle.xEventListItem.pxContainer = NULL;
+	taskIdle.xEventListItem.xItemValue = 1;	
+	taskIdle.xEventListItem.pvOwner = &taskIdle;		
+	
+	uxCurrentNumberOfTasks = ( unsigned long ) ( uxCurrentNumberOfTasks + 1U );
+	uxTaskNumber++;	
+	
+	listINSERT_END(&( pxReadyTasksLists[ ( &taskIdle )->uxPriority ] ), &( ( &taskIdle )->xStateListItem ));		
+	
 	
 	
 	
