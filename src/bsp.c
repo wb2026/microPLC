@@ -333,7 +333,10 @@ void vListInitialise( List_t * const pxList )
     pxList->uxNumberOfItems = ( unsigned long ) 0U;
 }
 
-
+void vListInitialiseItem( ListItem_t * const pxItem )
+{
+    pxItem->pxContainer = NULL;
+}
 
 void listINSERT_END(List_t *  pxList, ListItem_t * pxNewListItem ) 
 {
@@ -347,6 +350,54 @@ void listINSERT_END(List_t *  pxList, ListItem_t * pxNewListItem )
 	( pxNewListItem )->pxContainer = ( pxList );
 
 	( ( pxList )->uxNumberOfItems ) = ( unsigned long ) ( ( ( pxList )->uxNumberOfItems ) + 1U );
+}
+
+void vListInsert( List_t * const pxList,
+                  ListItem_t * const pxNewListItem )
+{
+    ListItem_t * pxIterator;
+    const uint32_t xValueOfInsertion = pxNewListItem->xItemValue;
+
+    if( xValueOfInsertion == portMAX_DELAY )
+    {
+        pxIterator = pxList->xListEnd.pxPrevious;
+    }
+    else
+    {
+        for( pxIterator = ( ListItem_t * ) &( pxList->xListEnd ); pxIterator->pxNext->xItemValue <= xValueOfInsertion; pxIterator = pxIterator->pxNext )
+        {
+        }
+    }
+
+    pxNewListItem->pxNext = pxIterator->pxNext;
+    pxNewListItem->pxNext->pxPrevious = pxNewListItem;
+    pxNewListItem->pxPrevious = pxIterator;
+    pxIterator->pxNext = pxNewListItem;
+
+    pxNewListItem->pxContainer = pxList;
+
+    ( pxList->uxNumberOfItems ) = ( unsigned long ) ( pxList->uxNumberOfItems + 1U );
+}
+
+unsigned long uxListRemove( ListItem_t * const pxItemToRemove )
+{
+    List_t * const pxList = pxItemToRemove->pxContainer;
+
+    pxItemToRemove->pxNext->pxPrevious = pxItemToRemove->pxPrevious;
+    pxItemToRemove->pxPrevious->pxNext = pxItemToRemove->pxNext;
+
+    if( pxList->pxIndex == pxItemToRemove )
+    {
+        pxList->pxIndex = pxItemToRemove->pxPrevious;
+    }
+    else
+    {
+    }
+
+    pxItemToRemove->pxContainer = NULL;
+    ( pxList->uxNumberOfItems ) = ( unsigned long ) ( pxList->uxNumberOfItems - 1U );
+
+    return pxList->uxNumberOfItems;
 }
 
 void createTask(void)
