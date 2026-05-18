@@ -274,6 +274,7 @@ void task_key(void *p_arg)
 	while(1)
 	{
 		a++;
+//		portYIELD();
 	}
 }
 
@@ -286,6 +287,7 @@ void task_led(void *p_arg)
 	while(1)
 	{
 		b++;
+//		portYIELD();
 	}	
 }
 
